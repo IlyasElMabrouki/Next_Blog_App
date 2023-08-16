@@ -2,10 +2,12 @@
 import { useRef } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useRouter } from 'next/navigation';
 
 export default function NewPage() {
   const titleRef = useRef(null);
   const descriptionRef = useRef(null);
+  const router = useRouter()
 
   async function addPost({ title, description }) {
     const res = await fetch('http://localhost:3000/api/blog', {
@@ -20,12 +22,13 @@ export default function NewPage() {
 
   async function submitHandler(e) {
     e.preventDefault();
+    toast.loading('Loading ...')
     if (titleRef.current && titleRef.current) {
       await addPost({
         title: titleRef.current.value,
         description: descriptionRef.current.value,
       });
-      toast.success('Post Added Succeffuly');
+      router.push('/')
     }
   }
 
